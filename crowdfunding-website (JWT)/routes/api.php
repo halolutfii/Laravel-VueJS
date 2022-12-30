@@ -30,8 +30,6 @@ Route::group([
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout'])->middleware('auth');
     Route::post('update-password', [AuthController::class, 'password'])->middleware('auth');
-
-
 });
 
 Route::group([
@@ -40,4 +38,5 @@ Route::group([
 
 ], function ($router) {
     Route::get('profile', [ProfileController::class, 'me']);
+    Route::post('update-profile', [ProfileController::class, 'updateProfile'])->middleware('auth');
 });

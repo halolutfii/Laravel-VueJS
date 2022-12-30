@@ -52,24 +52,6 @@ class AuthController extends Controller
         ], 200);
     }
 
-    public function password(Request $request) {
-        $request->validate([
-            'email' => 'required|email',
-        ]);
-
-        $user = User::create([
-            'password' => Hash::make($request->password),
-        ]);
-
-        $data['user'] = $user;
-
-        return response()->json([
-            'response_code' => '00',
-            'response_message' => 'Password berhasil di update', 
-            'data' => $data
-        ],201);
-    }
-
     public function logout(){
 
         auth()->logout();
@@ -77,4 +59,19 @@ class AuthController extends Controller
             return response()->json(['message' => 'Logout berhasil']);
     }
 
+    public function password(Request $request) {
+        $this->validate($request,[
+            'email' => 'required|email',
+            'password' => 'required|confirmed|min:8',
+        ]);
+
+        User::where('email', $request->email)->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        return response()->json([
+            'response_code' => '00',
+            'response_message' => 'Password berhasil di update', 
+        ],200);
+    }
 } 
